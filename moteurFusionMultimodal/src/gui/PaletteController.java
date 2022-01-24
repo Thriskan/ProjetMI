@@ -25,6 +25,7 @@ public class PaletteController extends javax.swing.JFrame {
     public PaletteController() {
         initComponents();
         addRadioToGroup();
+        jRadioButton1.setSelected(true);
     }
 
     public Mode getCurrentMode() {
@@ -46,7 +47,6 @@ public class PaletteController extends javax.swing.JFrame {
     public JTextField getjTextField1() {
         return jTextField1;
     }
-    
     
 
     /**
@@ -74,6 +74,11 @@ public class PaletteController extends javax.swing.JFrame {
         });
 
         jRadioButton2.setText("Reconnaissance");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setText("Nom de la forme");
 
@@ -106,8 +111,12 @@ public class PaletteController extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
+        currentMode = Mode.APP;
     }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        currentMode = Mode.REC;
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     /**
      * @param args the command line arguments
