@@ -2,9 +2,10 @@ package gestuel;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Stroke 
+public class Stroke implements Serializable
 {
 	private static final int NB_POINTS = 32;
 	private static final int SQUARE_SIZE = 100;

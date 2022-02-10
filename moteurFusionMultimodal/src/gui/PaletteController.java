@@ -4,6 +4,7 @@
  */
 package gui;
 
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -17,15 +18,19 @@ public class PaletteController extends javax.swing.JFrame {
         APP,
         REC
     }
-    
-    private Mode currentMode = Mode.APP;
+    //private Mode currentMode = Mode.APP;
+    private Mode currentMode = Mode.REC;
     /**
      * Creates new form PaletteController
      */
     public PaletteController() {
         initComponents();
         addRadioToGroup();
-        jRadioButton1.setSelected(true);
+        
+        //jRadioButton1.setSelected(true);
+        
+        jRadioButton1.setEnabled(false);
+        jRadioButton2.setSelected(true);
     }
 
     public Mode getCurrentMode() {
@@ -47,6 +52,16 @@ public class PaletteController extends javax.swing.JFrame {
     public JTextField getjTextField1() {
         return jTextField1;
     }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+    
+    
     
 
     /**
@@ -63,6 +78,7 @@ public class PaletteController extends javax.swing.JFrame {
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,6 +98,8 @@ public class PaletteController extends javax.swing.JFrame {
 
         jTextField1.setText("Nom de la forme");
 
+        jLabel1.setText("Commande reconnue");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,7 +110,9 @@ public class PaletteController extends javax.swing.JFrame {
                     .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(146, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -103,7 +123,9 @@ public class PaletteController extends javax.swing.JFrame {
                     .addComponent(jRadioButton1)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jLabel1))
                 .addContainerGap(246, Short.MAX_VALUE))
         );
 
@@ -162,6 +184,7 @@ public class PaletteController extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JTextField jTextField1;

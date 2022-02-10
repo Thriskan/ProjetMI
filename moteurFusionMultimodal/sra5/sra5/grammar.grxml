@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
+                "grammar.dtd">
+<!-- the default grammar language is FR  -->
+<grammar  version="1.0"
+          mode ="voice"
+          xmlns="http://www.w3.org/2001/06/grammar"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                              grammar.xsd"
+          xml:lang="fr-FR" root="flux_vocal" tag-format="semantics/1.0">
+
+<!-- ============================================================= -->
+     <rule id = "flux_vocal" scope = "public">
+		   <ruleref special="GARBAGE" />
+		   <tag> out.position = "undefined" </tag>
+                    <item> <ruleref uri="#couleur"/><tag>out.couleur = rules.couleur;</tag></item>
+		   <item repeat="0-1">
+                 <ruleref uri="#position"/><tag>out.position = rules.position;</tag>
+           </item>
+           <tag>out = "Position=" + out.position + " Couleur=" + out.couleur</tag>
+	</rule>
+
+     <!-- regle position -->
+     <!-- =========================================== -->
+     <rule id="position">
+			<one-of>
+					<item> la <tag>out = "attenteposition"</tag></item>
+					<item> a cette position <tag>out = "attenteposition"</tag></item>
+					<item> ici <tag>out = "attenteposition"</tag></item>
+			</one-of>
+     </rule>
+
+	 <!-- regle couleur -->
+     <!-- =========================================== -->
+     <rule id="couleur">
+			<one-of>
+					<item> rouge <tag> out = "Rouge" </tag> </item>
+					<item> noir <tag> out = "Noir" </tag> </item>
+					<item> bleu <tag> out = "Bleu" </tag> </item>
+			</one-of>
+     </rule>
+</grammar>
