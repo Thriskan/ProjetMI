@@ -19,6 +19,8 @@
                  <ruleref uri="#position"/><tag>out.position = rules.position;</tag>
            </item>
            <tag>out = "Position=" + out.position + " Couleur=" + out.couleur</tag>
+           <tag>out = "Couleur=" + out.couleur + " Position=" + out.position</tag>
+           <tag>out = "Objet=" + out.objet</tag>
 	</rule>
 
      <!-- regle position -->
@@ -40,4 +42,15 @@
 					<item> bleu <tag> out = "Bleu" </tag> </item>
 			</one-of>
      </rule>
+
+     <!-- regle objet -->
+     <!-- =========================================== -->
+     <rule id="objet">
+			<one-of>
+					<item> cet objet <tag>out = "objetdesigne"</tag></item>
+					<item> ce rectangle <tag>out = "objetdesigne"</tag></item>
+					<item> cette ellipse <tag>out = "objetdesigne"</tag></item>
+			</one-of>
+     </rule>
+
 </grammar>

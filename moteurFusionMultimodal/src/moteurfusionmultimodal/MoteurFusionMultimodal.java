@@ -11,6 +11,8 @@ import fr.dgac.ivy.IvyMessageListener;
 import gestuel.GestureListener;
 import gui.PaletteController;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -112,7 +114,7 @@ public class MoteurFusionMultimodal {
 );
         bus.bindMsg("Palette:MouseMoved x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
-                System.out.println("pointeur : " + args[0]);
+                //System.out.println("pointeur : " + args[0]);
                 pointeur.setPosition(new Point2D.Double(Double.valueOf(args[0]), Double.valueOf(args[1])));
                 // System.out.println("Position pointeur : " + pointeur.getPosition().x + " , " + pointeur.getPosition().y);
             }
@@ -127,39 +129,58 @@ public class MoteurFusionMultimodal {
                 System.out.println(args[0]);
                 //String mots[] = args[0].split(" ");
                 //System.out.println("couleur : " + mots[0]);
-                String color = defineColor(args[0]);
-                String msg = "Palette:CreerEllipse x=" + (int)pointeur.getPosition().x + " y=" + (int)pointeur.getPosition().y + " longueur=100" + " hauteur=100" + " couleurFond=" + color + " couleurContour=" + color;
-                System.out.println("Position pointeur : " + pointeur.getPosition().x + " - " + pointeur.getPosition().y );
+                if (controler.isMicro()){
+                    String color = defineColor(args[0]);
+                    String msg = "Palette:CreerEllipse x=" + (int) pointeur.getPosition().x + " y=" + (int) pointeur.getPosition().y + " longueur=100" + " hauteur=100" + " couleurFond=" + color + " couleurContour=" + color;
+                    System.out.println("Position pointeur : " + pointeur.getPosition().x + " - " + pointeur.getPosition().y);
+                    try {
+                        bus.sendMsg(msg);
+                    } catch (IvyException ex) {
+                        Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+
+            }
+        ;
+        }
+
+    );
+        
+        controler.getjButton1().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String msg = "Palette:SupprimerTout";
+                System.out.println(msg);
                 try {
                     bus.sendMsg(msg);
                 } catch (IvyException ex) {
                     Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
-        ;
+        });
     }
 
-    );
-    }
-    
-    public String defineColor(String ligne){
+    public String defineColor(String ligne) {
         String mots[] = ligne.split(" ");
         String c = "";
-        if (mots[0] == "..."){
+        if (mots[0] == "...") {
             c = mots[1];
-        }
-        else{
+        } else {
             c = mots[0];
         }
         System.out.println("couleur = " + c);
         return switch (c) {
-            case "rouge" -> "255:0:0";
-            case "vert" -> "0:255:0";
-            default -> "0:0:0";
+            case "rouge" ->
+                "255:0:0";
+            case "bleu" ->
+                "0:0:255";
+            default ->
+                "0:0:0";
         };
     }
-    
+
     public void drawPoint(String x, String y, String color) {
 
         String msg = "Palette:CreerEllipse x=" + x + " y=" + y + " longueur=1" + " hauteur=1" + " couleurFond=" + color + " couleurContour=" + color;
