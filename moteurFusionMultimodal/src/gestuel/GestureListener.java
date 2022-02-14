@@ -28,16 +28,12 @@ import moteurfusionmultimodal.MoteurFusionMultimodal;
 public class GestureListener implements IvyMessageListener {
 
     private String filename = "../moteurfusionmultimodal/savings";
-    private Ivy bus;
     private Stroke stroke = new Stroke();
     private HashMap<String, Stroke> collection = new HashMap();
     private PaletteController controler;
-    private MoteurFusionMultimodal mfm;
 
     public GestureListener(Ivy aBus, PaletteController aControler, MoteurFusionMultimodal aMfm) {
-        this.bus = aBus;
         this.controler = aControler;
-        this.mfm = aMfm;
 
         try {
             FileInputStream file = new FileInputStream(filename);

@@ -1,56 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN"
-                "grammar.dtd">
+<!DOCTYPE grammar PUBLIC "-//W3C//DTD GRAMMAR 1.0//EN" "grammar.dtd">
 <!-- the default grammar language is FR  -->
-<grammar  version="1.0"
-          mode ="voice"
-          xmlns="http://www.w3.org/2001/06/grammar"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://www.w3.org/2001/06/grammar
-                              grammar.xsd"
-          xml:lang="fr-FR" root="flux_vocal" tag-format="semantics/1.0">
+<grammar version="1.0" mode="voice" xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/2001/06/grammar
+                              grammar.xsd" xml:lang="fr-FR" root="flux_vocal" tag-format="semantics/1.0">
 
-<!-- ============================================================= -->
+     <!-- ============================================================= -->
      <rule id = "flux_vocal" scope = "public">
-		   <ruleref special="GARBAGE" />
-		   <tag> out.position = "undefined" </tag>
-                    <item> <ruleref uri="#couleur"/><tag>out.couleur = rules.couleur;</tag></item>
-		   <item repeat="0-1">
-                 <ruleref uri="#position"/><tag>out.position = rules.position;</tag>
-           </item>
-           <tag>out = "Position=" + out.position + " Couleur=" + out.couleur</tag>
-           <tag>out = "Couleur=" + out.couleur + " Position=" + out.position</tag>
-           <tag>out = "Objet=" + out.objet</tag>
-	</rule>
+          <ruleref special="GARBAGE" />
+          <one-of>
+               <item> <ruleref uri="#commande_select"/><tag>out = "Select " + " Objet=" + out.objet + " Couleur=" + out.couleur</tag></item>
+               <item> <ruleref uri="#commande_moving"/><tag>out = "Move " + " Position=" + out.position</tag></item>
+               <item> <ruleref uri="#commande_color"/><tag>out = "Color : " + " Couleur=" + out.couleur</tag></item>
+               <item> <ruleref uri="#commande_draw1"/><tag>out = "Draw " + " Couleur=" + out.couleur + " Position=" + out.position</tag></item>
+               <item> <ruleref uri="#commande_draw2"/><tag>out = "Draw " + " Position=" + out.position + " Couleur=" + out.couleur</tag></item>
+          </one-of>
+          
+     </rule>
+
+
+     <rule id="commande_select" scope="public">
+          <ruleref special="GARBAGE" />
+          <item repeat="1">
+             <ruleref uri="#objet"/>  
+          </item>
+          <ruleref special="GARBAGE" />
+     </rule>
+
+     <rule id="commande_color" scope="public">
+          <ruleref special="GARBAGE" />
+          <item repeat="1">
+             <ruleref uri="#couleur"/>  
+          </item>
+          <ruleref special="GARBAGE" />
+     </rule>
+
+     <rule id="commande_moving" scope="public">
+          <ruleref special="GARBAGE" />
+          <item repeat="1">
+               <ruleref uri="#position"/>  
+            </item>
+          <ruleref special="GARBAGE" />
+     </rule>
+
+     <rule id="commande_draw1" scope="public">
+          <ruleref special="GARBAGE" />
+          <item repeat="1">
+             <ruleref uri="#couleur"/>  
+          </item>
+          <item repeat="1">
+               <ruleref uri="#position"/>  
+            </item>
+          <ruleref special="GARBAGE" />
+     </rule>
+
+     <rule id="commande_draw2" scope="public">
+          <ruleref special="GARBAGE" />
+          <item repeat="1">
+             <ruleref uri="#position"/>  
+          </item>
+          <item repeat="1">
+               <ruleref uri="#couleur"/>  
+            </item>
+          <ruleref special="GARBAGE" />
+     </rule>
 
      <!-- regle position -->
      <!-- =========================================== -->
      <rule id="position">
-			<one-of>
-					<item> la <tag>out = "attenteposition"</tag></item>
-					<item> a cette position <tag>out = "attenteposition"</tag></item>
-					<item> ici <tag>out = "attenteposition"</tag></item>
-			</one-of>
+          <one-of>
+               <item>
+                    la
+               </item>
+               <item>
+                    a cette position
+               </item>
+               <item>
+                    ici
+               </item>
+          </one-of>
      </rule>
 
-	 <!-- regle couleur -->
+     <!-- regle couleur -->
      <!-- =========================================== -->
      <rule id="couleur">
-			<one-of>
-					<item> rouge <tag> out = "Rouge" </tag> </item>
-					<item> noir <tag> out = "Noir" </tag> </item>
-					<item> bleu <tag> out = "Bleu" </tag> </item>
-			</one-of>
+          <one-of>
+               <item>
+                    rouge
+                    <tag> out = "Rouge" </tag>
+               </item>
+               <item>
+                    noir
+                    <tag> out = "Noir" </tag>
+               </item>
+               <item>
+                    bleu
+                    <tag> out = "Bleu" </tag>
+               </item>
+          </one-of>
      </rule>
 
      <!-- regle objet -->
      <!-- =========================================== -->
      <rule id="objet">
-			<one-of>
-					<item> cet objet <tag>out = "objetdesigne"</tag></item>
-					<item> ce rectangle <tag>out = "objetdesigne"</tag></item>
-					<item> cette ellipse <tag>out = "objetdesigne"</tag></item>
-			</one-of>
+          <one-of>
+               <item>
+                    cet objet
+               </item>
+               <item>
+                    ce rectangle
+               </item>
+               <item>
+                    cette ellipse
+               </item>
+          </one-of>
      </rule>
 
 </grammar>
