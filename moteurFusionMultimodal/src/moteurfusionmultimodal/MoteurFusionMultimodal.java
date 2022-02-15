@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tools.Pointeur;
+import tools.Utils;
 
 /**
  *
@@ -24,7 +25,7 @@ import tools.Pointeur;
  */
 public class MoteurFusionMultimodal {
 
-
+    
     private final Ivy bus;
     private final PaletteController controler;
     private final Pointeur pointeur;
@@ -53,7 +54,7 @@ public class MoteurFusionMultimodal {
 
     private Commande current_commande = Commande.AUCUNE;
 
-    public MoteurFusionMultimodal() throws Exception{
+    public MoteurFusionMultimodal(String ip) throws Exception{
         bus = new Ivy("BUS IVY", "IVY Ready", null);
         
         controler = new PaletteController();
@@ -65,19 +66,14 @@ public class MoteurFusionMultimodal {
 
         machine = new StateMachine();
 
-        registeredShapes = new ArrayList<String>();
+        registeredShapes = new ArrayList<>();
 
         /* Initiate components */
         // controler.setInitialState();
         //controler.setServeur(this);
-
-        //FOR WINDOWS
-        //bus.start("127.255.255.255:2010");
-        
-        //FOR MAC
-        bus.start("127.0.0.1:2010");
-        
-        
+      
+        bus.start(ip);
+                
         bus.sendToSelf(true);
         initiateBusActivity();
     }
@@ -166,10 +162,10 @@ public class MoteurFusionMultimodal {
          bus.bindMsg("Palette:Info nom=(.*) x=(.*) y=(.*) longueur=(.*) hauteur=(.*) couleurFond=(.*) couleurContour=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 //System.out.println("pointeur : " + args[0]);
-                System.out.println("resultat " + args[0] + " : " + args[5] + " " + args[5].length());
-                System.out.println("recherche " + convertToEng(requestedColor) + convertToEng(requestedColor).length());
-                System.out.println(args[5].equals(convertToEng(requestedColor)));
-                if (args[5].equals(convertToEng(requestedColor))) {
+                System.out.println("resultat " + args[0] + " : " + args[5] + " " + args[5].length());                              
+                System.out.println("recherche " + Utils.convertToEng(requestedColor) + Utils.convertToEng(requestedColor).length());
+                System.out.println(args[5].equals(Utils.convertToEng(requestedColor)));
+                if (args[5].equals(Utils.convertToEng(requestedColor))) {
                     colorMatching = true;
                     selectedShape = args[0];
                 }
@@ -191,7 +187,7 @@ public class MoteurFusionMultimodal {
                     switch (voice_commande) {
                         case DRAW:
                             if (machine.getCurrent_state() == StateMachine.State.DRAW_ELLIPSE || machine.getCurrent_state() == StateMachine.State.DRAW_RECT) {
-                                String color = defineColor(args[0]);
+                                String color = Utils.defineColor(args[0]);
                                 String msg;
                                 if (machine.getCurrent_state() == StateMachine.State.DRAW_ELLIPSE) {
                                     msg = "Palette:CreerEllipse x=" + (int) pointeur.getPosition().x + " y=" + (int) pointeur.getPosition().y + " longueur=100" + " hauteur=100" + " couleurFond=" + color + " couleurContour=" + color;
@@ -304,6 +300,7 @@ public class MoteurFusionMultimodal {
                              {
                                 try {
                                     bus.sendMsg(msg);
+                                    selectedShape = "";
                                 } catch (IvyException ex) {
                                     Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -337,36 +334,7 @@ public class MoteurFusionMultimodal {
                 }
             }
         });
-    }
-
-    public String defineColor(String ligne) {
-        String mots[] = ligne.split(" ");
-        String c = "";
-        if ("...".equals(mots[0])) {
-            System.out.println("1 : ... -> " + mots[1]);
-            if ("la".equals(mots[1]) || "ici".equals(mots[1]) || "a cette position".equals(mots[1])) {
-                c = mots[2];
-            } else {
-                c = mots[1];
-            }
-        } else {
-            System.out.println("1 : OK -> " + mots[0]);
-            if ("la".equals(mots[0]) || "ici".equals(mots[0]) || "a cette position".equals(mots[0])) {
-                c = mots[1];
-            } else {
-                c = mots[0];
-            }
-        }
-        System.out.println("couleur = " + c);
-        return switch (c) {
-            case "rouge" ->
-                "255:0:0";
-            case "bleu" ->
-                "0:0:255";
-            default ->
-                "0:0:0";
-        };
-    }
+    }    
 
     public void drawPoint(String x, String y, String color) {
 
@@ -440,16 +408,5 @@ public class MoteurFusionMultimodal {
     /*public void searchColor(String color) throws IvyException {
         
     }*/
-    public String convertToEng(String c) {
-        switch (c) {
-            case "noir":
-                return "black";
-            case "rouge":
-                return "red";
-            case "bleu":
-                return "blue";
-            default:
-                return "black";
-        }
-    }
+    
 }

@@ -11,7 +11,7 @@ import fr.irit.elipse.enseignement.isia.Couleur;
  * @author chatonbrutal
  */
 public abstract class Command {
-    
+       
     private String action = "";
     private String objet = "";
     
