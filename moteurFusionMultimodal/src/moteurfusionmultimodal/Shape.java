@@ -13,30 +13,30 @@ import java.util.ArrayList;
  * @author caros
  */
 public class Shape {
-    
-    public enum Kind {
+
+    public enum ShapeType {
         RECTANGLE,
         ELIPSE
     }
-    
+
     private int id;
-    private Kind kind;
+    private ShapeType shapeType;
     private Color color;
     private ArrayList<Point2D.Double> trace;
     private Point2D.Double origine;
 
-    public Shape(int aId, Kind kind, Color color) {
+    public Shape(int aId, ShapeType aShapeType, Color color) {
         this.id = aId;
-        this.kind = kind;
+        this.shapeType = aShapeType;
         this.color = color;
     }
 
-    public Kind getKind() {
-        return kind;
+    public ShapeType getShapeType() {
+        return shapeType;
     }
 
-    public void setKind(Kind kind) {
-        this.kind = kind;
+    public void setShapeType(ShapeType aShapeType) {
+        this.shapeType = aShapeType;
     }
 
     public Color getColor() {
@@ -62,8 +62,5 @@ public class Shape {
     public void setOrigine(Point2D.Double origine) {
         this.origine = origine;
     }
-    
-    
-    
-    
+
 }

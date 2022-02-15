@@ -10,15 +10,13 @@ import fr.dgac.ivy.IvyException;
 import fr.dgac.ivy.IvyMessageListener;
 import gestuel.GestureListener;
 import gui.PaletteController;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pointage.Pointeur;
+import tools.Pointeur;
 
 /**
  *
@@ -26,23 +24,21 @@ import pointage.Pointeur;
  */
 public class MoteurFusionMultimodal {
 
-    public String SAVEFILE = "savings";
 
-    private Ivy bus;
-    private PaletteController controler;
-    private Pointeur pointeur;
-    private StateMachine machine;
+    private final Ivy bus;
+    private final PaletteController controler;
+    private final Pointeur pointeur;
+    private final StateMachine machine;
 
     private boolean requestShapes = false;
-    private ArrayList<String> registeredShapes;
+    private final ArrayList<String> registeredShapes;
     private boolean colorMatching = false;
     private String selectedShape;
     private String requestedColor;
     private boolean infoReceived;
 
-    private GestureListener gestureListener;
+    private final GestureListener gestureListener;   
 
-    private HashMap<String, Shape> ensemble;
 
     public enum Commande {
         AUCUNE,
@@ -57,15 +53,15 @@ public class MoteurFusionMultimodal {
 
     private Commande current_commande = Commande.AUCUNE;
 
-    public MoteurFusionMultimodal() throws IvyException {
-
+    public MoteurFusionMultimodal() throws Exception{
         bus = new Ivy("BUS IVY", "IVY Ready", null);
+        
         controler = new PaletteController();
         controler.setVisible(true);
 
         pointeur = new Pointeur();
 
-        gestureListener = new GestureListener(bus, controler, this);
+        gestureListener = new GestureListener();
 
         machine = new StateMachine();
 
@@ -74,58 +70,59 @@ public class MoteurFusionMultimodal {
         /* Initiate components */
         // controler.setInitialState();
         //controler.setServeur(this);
-        bus.start("127.255.255.255:2010");
+
+        //FOR WINDOWS
+        //bus.start("127.255.255.255:2010");
+        
+        //FOR MAC
+        bus.start("127.0.0.1:2010");
+        
+        
         bus.sendToSelf(true);
         initiateBusActivity();
-
     }
 
     private void initiateBusActivity() throws IvyException {
 
-        bus.bindMsg("Palette:MousePressed x=(.*) y=(.*)", new IvyMessageListener() {
-            public void receive(IvyClient client, String[] args) {
-                //System.out.println(args[0]);
-                String st = "Le point de départ est (" + args[0] + " , " + args[1] + ")\n";
-
-                //drawPoint(args[0], args[1], "GREEN");
-                gestureListener.initiateStroke();
-                gestureListener.addPointToStroke(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
-            }
-        ;
+        bus.bindMsg("Palette:MousePressed x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
+                        
+            /*   
+            String st = "Le point de départ est (" + args[0] + " , " + args[1] + ")\n";
+            System.out.println(st);
+            
+            drawPoint(args[0], args[1], "GREEN");
+            */
+            
+            gestureListener.initiateStroke();
+            gestureListener.addPointToStroke(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
         });
          
-         bus.bindMsg("Palette:MouseReleased x=(.*) y=(.*)", new IvyMessageListener() {
-            public void receive(IvyClient client, String[] args) {
-                String st = "Le point d'arrivée est (" + args[0] + " , " + args[1] + ")\n";
-
-                //drawPoint(args[0], args[1], "RED");
-                gestureListener.normalizeStroke();
-
-                if (controler.getCurrentMode() == PaletteController.Mode.APP) {
-                    gestureListener.registerStroke();
-                } else {
-                    String best = gestureListener.findStroke();
-                    manageCommande(best);
-                    controler.getjLabel1().setText(best);
-                }
-
-                /*String msg = "Palette:ModifierCurseur type=DEFAULT";
-                try {
-                    bus.sendMsg(msg);
-                } catch (IvyException ex) {
-                    Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
-            }
-        ;
-
-        }
-
-);
+         bus.bindMsg("Palette:MouseReleased x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
+             String st = "Le point d'arrivée est (" + args[0] + " , " + args[1] + ")\n";
+             
+             //drawPoint(args[0], args[1], "RED");
+             gestureListener.normalizeStroke();
+             
+             if (controler.getCurrentMode() == PaletteController.Mode.APP) {
+                 gestureListener.registerStroke(controler.getTfApprentissage().getText());
+             } else {
+                 String best = gestureListener.findStroke();
+                 manageCommande(best);
+                 controler.getLbReconnaissance().setText(best);
+             }
+             
+             /*String msg = "Palette:ModifierCurseur type=DEFAULT";
+             try {
+             bus.sendMsg(msg);
+             } catch (IvyException ex) {
+             Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
+             }*/
+        });
          bus.bindMsg("Palette:MouseDragged x=(.*) y=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
                 //System.out.println(args[0]);
                 String st = "Drag à (" + args[0] + " , " + args[1] + ")\n";
-
+                System.out.println(st);
                 //drawPoint(args[0], args[1], "BLACK");
                 gestureListener.addPointToStroke(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
             }
@@ -186,10 +183,10 @@ public class MoteurFusionMultimodal {
         //sra5 Text=chaîne_orthographique Confidence=taux_de_confiance
         bus.bindMsg("sra5 Text=(.*) Confidence=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
-                //System.out.println(args[0]);
+                System.out.println(args[0]);
                 //String mots[] = args[0].split(" ");
                 //System.out.println("couleur : " + mots[0]);
-                if (controler.isMicro()) {
+                if (controler.isMicroActivated()) {
                     Commande voice_commande = findParametersType(args[0]);
                     switch (voice_commande) {
                         case DRAW:
@@ -327,7 +324,7 @@ public class MoteurFusionMultimodal {
         }
         );
 
-        controler.getjButton1().addActionListener(new ActionListener() {
+        controler.getBtCleanAll().addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -455,10 +452,4 @@ public class MoteurFusionMultimodal {
                 return "black";
         }
     }
-
-    public static void main(String[] args) throws IvyException {
-        MoteurFusionMultimodal moteurFusionMultimodal;
-        moteurFusionMultimodal = new MoteurFusionMultimodal();
-    }
-
 }

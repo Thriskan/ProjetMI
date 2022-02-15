@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package pointage;
+package tools;
 
 import java.awt.geom.Point2D;
 
@@ -11,12 +11,12 @@ import java.awt.geom.Point2D;
  * @author caros
  */
 public class Pointeur {
-    
+
     private Point2D.Double position;
     private String selection = "";
 
     public Pointeur() {
-        position = new Point2D.Double(0,0);
+        position = new Point2D.Double(0, 0);
     }
 
     public Point2D.Double getPosition() {
@@ -34,7 +34,5 @@ public class Pointeur {
     public void setSelection(String selection) {
         this.selection = selection;
     }
-    
-    
-    
+
 }

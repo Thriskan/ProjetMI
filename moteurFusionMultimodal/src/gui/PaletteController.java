@@ -25,7 +25,7 @@ public class PaletteController extends javax.swing.JFrame {
      * Creates new form PaletteController
      */
     
-    private boolean micro = false;
+    private boolean isMicroActivated = false;
     
     public PaletteController() {
         initComponents();
@@ -33,8 +33,8 @@ public class PaletteController extends javax.swing.JFrame {
         
         //jRadioButton1.setSelected(true);
         
-        jRadioButton1.setEnabled(false);
-        jRadioButton2.setSelected(true);
+        rbApprentissage.setEnabled(false);
+        rbReconnaissance.setSelected(true);
     }
 
     public Mode getCurrentMode() {
@@ -45,32 +45,32 @@ public class PaletteController extends javax.swing.JFrame {
         this.currentMode = currentMode;
     }
 
-    public JRadioButton getjRadioButton1() {
-        return jRadioButton1;
+    public JRadioButton getRbApprentissage() {
+        return rbApprentissage;
     }
 
-    public JRadioButton getjRadioButton2() {
-        return jRadioButton2;
+    public JRadioButton getRbReconnaissance() {
+        return rbReconnaissance;
     }
 
-    public JTextField getjTextField1() {
-        return jTextField1;
+    public JTextField getTfApprentissage() {
+        return tfApprentissage;
     }
 
-    public JLabel getjLabel1() {
-        return jLabel1;
+    public JLabel getLbReconnaissance() {
+        return lbReconnaissance;
     }
 
-    public void setjLabel1(JLabel jLabel1) {
-        this.jLabel1 = jLabel1;
+    public void setLbReconnaissance(JLabel aLabel) {
+        this.lbReconnaissance = aLabel;
     }
 
-    public boolean isMicro() {
-        return micro;
+    public boolean isMicroActivated() {
+        return isMicroActivated;
     }
 
-    public JLabel getjLabel3() {
-        return jLabel3;
+    public JLabel getLbCurrentStateValue() {
+        return lbCurrentStateValue;
     }
     
     
@@ -87,52 +87,52 @@ public class PaletteController extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        rbApprentissage = new javax.swing.JRadioButton();
+        rbReconnaissance = new javax.swing.JRadioButton();
+        tfApprentissage = new javax.swing.JTextField();
+        lbReconnaissance = new javax.swing.JLabel();
+        btCleanAll = new javax.swing.JButton();
+        tbMicroActivation = new javax.swing.JToggleButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lbCurrentStateValue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jRadioButton1.setText("Apprentissage");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        rbApprentissage.setText("Apprentissage");
+        rbApprentissage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                rbApprentissageActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("Reconnaissance");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        rbReconnaissance.setText("Reconnaissance");
+        rbReconnaissance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                rbReconnaissanceActionPerformed(evt);
             }
         });
 
-        jTextField1.setText("Nom de la forme");
+        tfApprentissage.setText("Nom de la forme");
 
-        jLabel1.setText("Commande reconnue");
+        lbReconnaissance.setText("Commande reconnue");
 
-        jButton1.setText("Clean All");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btCleanAll.setText("Clean All");
+        btCleanAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btCleanAllActionPerformed(evt);
             }
         });
 
-        jToggleButton1.setText("Micro OFF");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        tbMicroActivation.setText("Micro OFF");
+        tbMicroActivation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                tbMicroActivationActionPerformed(evt);
             }
         });
 
         jLabel2.setText("Current_state : ");
 
-        jLabel3.setText("IDLE");
+        lbCurrentStateValue.setText("IDLE");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,24 +141,24 @@ public class PaletteController extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tbMicroActivation, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(btCleanAll)
                                 .addGap(51, 51, 51)
                                 .addComponent(jLabel2)
                                 .addGap(0, 43, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jRadioButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jRadioButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
+                                    .addComponent(rbApprentissage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(rbReconnaissance, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(tfApprentissage)
+                                    .addComponent(lbReconnaissance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbCurrentStateValue, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(101, 101, 101))
         );
         layout.setVerticalGroup(
@@ -166,47 +166,47 @@ public class PaletteController extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rbApprentissage)
+                    .addComponent(tfApprentissage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jLabel1))
+                    .addComponent(rbReconnaissance)
+                    .addComponent(lbReconnaissance))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btCleanAll)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(lbCurrentStateValue))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jToggleButton1)
+                .addComponent(tbMicroActivation)
                 .addContainerGap(161, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void rbApprentissageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbApprentissageActionPerformed
         currentMode = Mode.APP;
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_rbApprentissageActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void rbReconnaissanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbReconnaissanceActionPerformed
         currentMode = Mode.REC;
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_rbReconnaissanceActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCleanAllActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btCleanAllActionPerformed
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        if (micro){
-            micro = false;
-            jToggleButton1.setText("Micro OFF");
+    private void tbMicroActivationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbMicroActivationActionPerformed
+        if (isMicroActivated){
+            isMicroActivated = false;
+            tbMicroActivation.setText("Micro OFF");
         }
         else{
-            micro = true;
-            jToggleButton1.setText("Micro ON");
+            isMicroActivated = true;
+            tbMicroActivation.setText("Micro ON");
         }
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_tbMicroActivationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,26 +245,26 @@ public class PaletteController extends javax.swing.JFrame {
     }
     
     private void addRadioToGroup(){
-        buttonGroup1.add(jRadioButton1);
-        buttonGroup1.add(jRadioButton2);
+        buttonGroup1.add(rbApprentissage);
+        buttonGroup1.add(rbReconnaissance);
     }
 
-    public JButton getjButton1() {
-        return jButton1;
+    public JButton getBtCleanAll() {
+        return btCleanAll;
     }
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btCleanAll;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JLabel lbCurrentStateValue;
+    private javax.swing.JLabel lbReconnaissance;
+    private javax.swing.JRadioButton rbApprentissage;
+    private javax.swing.JRadioButton rbReconnaissance;
+    private javax.swing.JToggleButton tbMicroActivation;
+    private javax.swing.JTextField tfApprentissage;
     // End of variables declaration//GEN-END:variables
 }

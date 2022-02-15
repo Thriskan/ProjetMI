@@ -4,51 +4,30 @@
  */
 package gestuel;
 
-import fr.dgac.ivy.Ivy;
-import fr.dgac.ivy.IvyClient;
-import fr.dgac.ivy.IvyException;
-import fr.dgac.ivy.IvyMessageListener;
-import gui.PaletteController;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import moteurfusionmultimodal.MoteurFusionMultimodal;
 
 /**
  *
  * @author caros
  */
-public class GestureListener implements IvyMessageListener {
+public class GestureListener {
 
-    private String filename = "../moteurfusionmultimodal/savings";
+    private static final String FILENAME = "savings";
+    private static final String FILEPATH = "../moteurfusionmultimodal/";
+    private String filenameFullPath = FILEPATH + FILENAME;
+
     private Stroke stroke = new Stroke();
-    private HashMap<String, Stroke> collection = new HashMap();
-    private PaletteController controler;
+    private HashMap<String, Stroke> strokes = new HashMap();
 
-    public GestureListener(Ivy aBus, PaletteController aControler, MoteurFusionMultimodal aMfm) {
-        this.controler = aControler;
-
-        try {
-            FileInputStream file = new FileInputStream(filename);
-            ObjectInputStream ob = new ObjectInputStream(file);
-            collection = (HashMap) ob.readObject();
-            ob.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void receive(IvyClient ic, String[] strings) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public GestureListener() throws Exception {
+        FileInputStream file = new FileInputStream(filenameFullPath);
+        ObjectInputStream ob = new ObjectInputStream(file);
+        strokes = (HashMap) ob.readObject();
+        ob.close();
     }
 
     public void initiateStroke() {
@@ -67,19 +46,10 @@ public class GestureListener implements IvyMessageListener {
         stroke.normalize();
     }
 
-    public void registerStroke() {
+    public void registerStroke(String aName) {
         System.out.println("registerStroke");
-        String name = controler.getjTextField1().getText();
-        collection.put(name, stroke);
-        /*try {
-            FileOutputStream file = new FileOutputStream(filename);
-            ObjectOutputStream ob = new ObjectOutputStream(file);
-            ob.writeObject(collection);
-            ob.flush();
-            ob.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        String name = aName;
+        strokes.put(name, stroke);
     }
 
     public String findStroke() {
@@ -88,8 +58,8 @@ public class GestureListener implements IvyMessageListener {
         double bestScore = 100000000;
         double thisScore;
 
-        for (String k : collection.keySet()) {
-            thisScore = processScore(stroke.getPoints(), collection.get(k).getPoints());
+        for (String k : strokes.keySet()) {
+            thisScore = processScore(stroke.getPoints(), strokes.get(k).getPoints());
             if (thisScore < bestScore) {
                 bestScore = thisScore;
                 best = k;
