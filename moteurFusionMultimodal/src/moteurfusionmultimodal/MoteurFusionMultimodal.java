@@ -182,7 +182,7 @@ public class MoteurFusionMultimodal {
         }
 
     );
-        
+
         //sra5 Text=chaîne_orthographique Confidence=taux_de_confiance
         bus.bindMsg("sra5 Text=(.*) Confidence=(.*)", new IvyMessageListener() {
             public void receive(IvyClient client, String[] args) {
