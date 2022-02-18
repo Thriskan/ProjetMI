@@ -9,28 +9,32 @@ package tools;
  * @author chatonbrutal
  */
 public class Utils {
-    
+
     public static final String BLACK_ENG = "black";
     public static final String BLACK_FR = "noir";
     public static final String BLACK_RGB = "0.0.0";
-    
+
     public static final String RED_ENG = "red";
     public static final String RED_FR = "rouge";
     public static final String RED_RGB = "255.0.0";
-    
+
     public static final String BLUE_ENG = "blue";
     public static final String BLUE_FR = "bleu";
     public static final String BLUE_RGB = "0.0.255";
-    
+
     public static String convertToEng(String c) {
         return switch (c) {
-            case BLACK_FR -> BLACK_ENG;
-            case RED_FR -> RED_ENG;
-            case BLUE_FR -> BLUE_ENG;
-            default -> BLACK_ENG;
+            case BLACK_FR ->
+                BLACK_ENG;
+            case RED_FR ->
+                RED_ENG;
+            case BLUE_FR ->
+                BLUE_ENG;
+            default ->
+                BLACK_ENG;
         };
     }
-    
+
     public static String defineColor(String ligne) {
         String mots[] = ligne.split(" ");
         String c = "";
