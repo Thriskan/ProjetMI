@@ -5,7 +5,7 @@
 package moteurfusionmultimodal;
 
 /**
- *
+ * State machine used to control system during execution
  * @author caros
  */
 public class StateMachine {
@@ -20,6 +20,10 @@ public class StateMachine {
         current_state = State.IDLE;
     }
 
+    /**
+     * called when a draw rect is needed
+     * All states can access to this state
+     */
     public void draw_rect() {
         switch (current_state) {
             case IDLE ->
@@ -37,6 +41,10 @@ public class StateMachine {
         }
     }
 
+    /**
+     * called when a draw ellipse is needed
+     * All states can access to this state
+     */
     public void draw_ellipse() {
         switch (current_state) {
             case IDLE ->
@@ -54,6 +62,10 @@ public class StateMachine {
         }
     }
 
+    /**
+     * called when a move command is needed
+     * All states can access to this state
+     */
     public void draw_m() {
         switch (current_state) {
             case IDLE ->
@@ -71,6 +83,10 @@ public class StateMachine {
         }
     }
 
+    /**
+     * called when a delete command is needed
+     * All states can access to this state
+     */
     public void draw_cross() {
         switch (current_state) {
             case IDLE ->
@@ -88,6 +104,10 @@ public class StateMachine {
         }
     }
 
+    /**
+     * called when a voice drawing parameter is given
+     * After a drawing state, the state comes back to idle
+     */
     public void voice_draw() {
         switch (current_state) {
             case IDLE ->
@@ -110,6 +130,10 @@ public class StateMachine {
     }
 
  
+    /**
+     * called when voice position is given, to move an object
+     * After the execution, the state comes back to idle
+     */
     public void voice_move_position() {
         switch (current_state) {
             case IDLE ->
@@ -129,6 +153,11 @@ public class StateMachine {
         }
     }
 
+    /**
+     * called when voice selected object is given
+     * If it's the move command, the state is set to MOVING, waiting for the position parameter
+     * If it's the delete command, the state comes back to idle
+     */
     public void voice_object() {
         switch (current_state) {
             case IDLE ->

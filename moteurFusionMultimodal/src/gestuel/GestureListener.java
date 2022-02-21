@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package gestuel;
 
 import java.awt.geom.Point2D;
@@ -11,11 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * Tool class to manage stroke recognition
  * @author caros
  */
 public class GestureListener {
 
+    /** 
+     * Stroke saving file
+     * File: ../moteurfusionmultimodal/savings
+     * Contains Stroke objets with a String identifier
+     */
     private static final String FILENAME = "savings";
     private static final String FILEPATH = "../moteurfusionmultimodal/";
     private String filenameFullPath = FILEPATH + FILENAME;
@@ -30,30 +31,29 @@ public class GestureListener {
         ob.close();
     }
 
-    public void initiateStroke() {
-        System.out.println("initiateStroke");
+    public void initiateStroke() {        
         stroke = new Stroke();
         stroke.init();
     }
 
-    public void addPointToStroke(int x, int y) {
-        System.out.println("addPointToStroke");
+    public void addPointToStroke(int x, int y) {       
         stroke.addPoint(x, y);
     }
 
-    public void normalizeStroke() {
-        System.out.println("normalizeStroke");
+    public void normalizeStroke() {       
         stroke.normalize();
     }
 
-    public void registerStroke(String aName) {
-        System.out.println("registerStroke");
+    public void registerStroke(String aName) {        
         String name = aName;
         strokes.put(name, stroke);
     }
 
-    public String findStroke() {
-        System.out.println("findStroke");
+    /**
+     * Find the best matching stroke between the current stroke and saved strokes
+     * @return Selected stroke name after founding the best score
+     */
+    public String findStroke() {        
         String best = "unknown";
         double bestScore = 100000000;
         double thisScore;
@@ -64,11 +64,16 @@ public class GestureListener {
                 bestScore = thisScore;
                 best = k;
             }
-        }
-        System.out.println("Choix : " + best);
+        }        
         return best;
     }
 
+    /**
+     * Calculate the correspondance between two Point2D lists
+     * @param c: first point2D list (current stroke)
+     * @param t: second point2D list (one stroke of strokes list)
+     * @return result of the calcul
+     */
     public double processScore(ArrayList<Point2D.Double> c, ArrayList<Point2D.Double> t) {
         double d = 0;
         int n = c.size();

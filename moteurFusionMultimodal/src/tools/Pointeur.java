@@ -7,7 +7,7 @@ package tools;
 import java.awt.geom.Point2D;
 
 /**
- *
+ * Wrapper class to define a pointor object, with coordinates and optionally an object name
  * @author caros
  */
 public class Pointeur {

@@ -9,7 +9,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
- *
+ * Wrapper class to manage shapes, drawn on the palette
  * @author caros
  */
 public class Shape {

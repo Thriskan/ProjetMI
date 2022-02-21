@@ -5,7 +5,7 @@
 package tools;
 
 /**
- *
+ * Tools class with useful methods and attributes
  * @author chatonbrutal
  */
 public class Utils {
@@ -22,6 +22,11 @@ public class Utils {
     public static final String BLUE_FR = "bleu";
     public static final String BLUE_RGB = "0.0.255";
 
+    /**
+     * French to English color convertor
+     * @param c: French color
+     * @return : English color
+     */
     public static String convertToEng(String c) {
         return switch (c) {
             case BLACK_FR ->
@@ -34,26 +39,29 @@ public class Utils {
                 BLACK_ENG;
         };
     }
-
+    
+    /**
+     * Method used to extract color parameter from Ivy message
+     * Manage "...rouge" and "rouge" possibilities when receveid on Ivy bus
+     * @param ligne : Ivy message with color parameter
+     * @return Normalized color parameter
+     */
     public static String defineColor(String ligne) {
         String mots[] = ligne.split(" ");
         String c = "";
-        if ("...".equals(mots[0])) {
-            System.out.println("1 : ... -> " + mots[1]);
+        if ("...".equals(mots[0])) {            
             if ("la".equals(mots[1]) || "ici".equals(mots[1]) || "a cette position".equals(mots[1])) {
                 c = mots[2];
             } else {
                 c = mots[1];
             }
-        } else {
-            System.out.println("1 : OK -> " + mots[0]);
+        } else {            
             if ("la".equals(mots[0]) || "ici".equals(mots[0]) || "a cette position".equals(mots[0])) {
                 c = mots[1];
             } else {
                 c = mots[0];
             }
-        }
-        System.out.println("couleur = " + c);
+        }        
         return switch (c) {
             case RED_FR ->
                 RED_RGB;

@@ -10,28 +10,35 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
- *
+ * Palette controller
+ * Manage different mode of the multimodal system
+ * /!\ only REC is enabled because we already saved gestures from Learning mode into "savings" file /!\
+ * Allow palette full clean
+ * Useful to enable/disable micro (needed to have better performances with sra5)
  * @author caros
  */
 public class PaletteController extends javax.swing.JFrame {
     
+    /**
+     * Two modes defined
+     * APP : Learning mode
+     * REC : Recognition mode
+     */
     public enum Mode {
         APP,
         REC
     }
+    
     //private Mode currentMode = Mode.APP;
     private Mode currentMode = Mode.REC;
-    /**
-     * Creates new form PaletteController
-     */
+
     
     private boolean isMicroActivated = false;
     
     public PaletteController() {
         initComponents();
         addRadioToGroup();
-        
-        //jRadioButton1.setSelected(true);
+                
         
         rbApprentissage.setEnabled(false);
         rbReconnaissance.setSelected(true);
