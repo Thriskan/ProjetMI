@@ -83,10 +83,10 @@ public class MoteurFusionMultimodal {
     }
 
     private void initiateBusActivity() throws IvyException {
-        
+
         /**
-         * Palette mouse pressed event listener
-         * Init a stroke object and add the first point coordinate
+         * Palette mouse pressed event listener Init a stroke object and add the
+         * first point coordinate
          */
         bus.bindMsg("Palette:MousePressed x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
             gestureListener.initiateStroke();
@@ -94,10 +94,10 @@ public class MoteurFusionMultimodal {
         });
 
         /**
-         * Palette mouse released event listener
-         * Normalize current stroke object
-         * If learning mode is activated, add it to the savings file
-         * If recognition mode is activated, compare the current stroke object with saved strokes
+         * Palette mouse released event listener Normalize current stroke object
+         * If learning mode is activated, add it to the savings file If
+         * recognition mode is activated, compare the current stroke object with
+         * saved strokes
          */
         bus.bindMsg("Palette:MouseReleased x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
             gestureListener.normalizeStroke();
@@ -108,44 +108,46 @@ public class MoteurFusionMultimodal {
                 String best = gestureListener.findStroke();
                 manageCommande(best);
                 controler.getLbReconnaissance().setText(best);
+                controler.getjLabel3().setText("Dictez la consigne");
             }
         });
 
         /**
-         * Palette mouse dragged event listener
-         * Add point during the motion event (pressed -> dragged -> released)
+         * Palette mouse dragged event listener Add point during the motion
+         * event (pressed -> dragged -> released)
          */
         bus.bindMsg("Palette:MouseDragged x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
             gestureListener.addPointToStroke(Integer.valueOf(args[0]), Integer.valueOf(args[1]));
         });
 
         /**
-         * Palette mouse moved event listener
-         * Save the last known coordinate to the current pointor object
+         * Palette mouse moved event listener Save the last known coordinate to
+         * the current pointor object
          */
         bus.bindMsg("Palette:MouseMoved x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
             pointeur.setPosition(new Point2D.Double(Double.valueOf(args[0]), Double.valueOf(args[1])));
         });
 
         /**
-         * Palette shape detection event listener
-         * Save all object names detected and received from the palette
+         * Palette shape detection event listener Save all object names detected
+         * and received from the palette
          */
         bus.bindMsg("Palette:ResultatTesterPoint x=(.*) y=(.*) nom=(.*)", (IvyClient client, String[] args) -> {
             registeredShapes.add(args[2]);
         });
 
         /**
-         * Palette shape detection end event listener
-         * Stop shape detection request
+         * Palette shape detection end event listener Stop shape detection
+         * request
          */
         bus.bindMsg("Palette:FinTesterPoint x=(.*) y=(.*)", (IvyClient client, String[] args) -> {
             requestShapes = false;
         });
-        
+
         /**
-         * Palette object informations event listener
-         * Detect current object color and define selected shape if this color is matching the needed color
+         * Palette object informations event listener Detect current object
+         * color and define selected shape if this color is matching the needed
+         * color
          */
         bus.bindMsg("Palette:Info nom=(.*) x=(.*) y=(.*) longueur=(.*) hauteur=(.*) couleurFond=(.*) couleurContour=(.*)", (IvyClient client, String[] args) -> {
             if (args[5].equals(Utils.convertToEng(requestedColor))) {
@@ -155,15 +157,13 @@ public class MoteurFusionMultimodal {
             infoReceived = true;
         });
 
-        
         /**
          * voice event listener
          */
         bus.bindMsg("sra5 Text=(.*) Confidence=(.*)", (IvyClient client, String[] args) -> {
-            
             // Acceptance threshold to perform voice processus is 0.6
-            if (controler.isMicroActivated() && Double.parseDouble(args[1]) > 0.6) {
-                
+            if (controler.isMicroActivated() && Utils.findConfidence(args[1]) > 70) {
+                 System.out.println("arg : " + args[0]);
                 //Select current parameter definition with voice text
                 Commande voice_commande = findParametersType(args[0]);
                 switch (voice_commande) {
@@ -179,20 +179,22 @@ public class MoteurFusionMultimodal {
                                 msg = "Palette:CreerRectangle x=" + (int) pointeur.getPosition().x + " y=" + (int) pointeur.getPosition().y + " longueur=100" + " hauteur=60" + " couleurFond=" + color + " couleurContour=" + color;
 
                             }
-                            machine.voice_draw();
+                            controler.getjLabel3().setText("...");
                             try {
                                 bus.sendMsg(msg);
                             } catch (IvyException ex) {
+                                System.out.println("pb là");
                                 Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            machine.voice_draw();
                         }
-                        machine.voice_draw();
+                        
                     }
                     //Define a command parameter (object)
                     case CHOSE -> {
                         requestShapes = true;
                         registeredShapes.clear();
-                        
+
                         //Need to get an object name, detected at the current coordinate
                         String msg = "Palette:TesterPoint x=" + (int) pointeur.getPosition().x + " y=" + (int) pointeur.getPosition().y;
                         {
@@ -202,32 +204,35 @@ public class MoteurFusionMultimodal {
                                 Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
-                        
+
                         //Waiting all palette messages from detecting shapes
                         while (requestShapes) {
-                            System.out.println("requesting");
+                            //System.out.println("requesting");
                         }
-                        System.out.println("finish requesting : " + registeredShapes);
-                        
+
                         //If multiples shapes are detected at the coordinate
                         if (registeredShapes.size() > 1) {
                             System.out.println("need color to select");
+                            controler.getjLabel3().setText("Donnez une couleur pour choisir la bonne forme");
+                            machine.voice_object(false);
                         } else {
                             System.out.println("registered : " + registeredShapes);
                             if (machine.getCurrent_state() == StateMachine.State.DELETE) {
-                                System.out.println("deleted : " + registeredShapes.get(0));
                                 msg = "Palette:SupprimerObjet nom=" + registeredShapes.get(0);
                                 try {
                                     bus.sendMsg(msg);
                                 } catch (IvyException ex) {
                                     Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                                 }
+                                controler.getjLabel3().setText("...");
+                                machine.voice_object(true);
                             } else if (machine.getCurrent_state() == StateMachine.State.MOVE) {
                                 selectedShape = registeredShapes.get(0);
+                                controler.getjLabel3().setText("Donnez la position où déplacer l'objet");
+                                 machine.voice_object(true);
                             } else {
                                 System.out.println("erreur when requesting move");
                             }
-                            machine.voice_object();
                         }
                     }
 
@@ -238,7 +243,7 @@ public class MoteurFusionMultimodal {
                         colorMatching = false;
                         int i = 0;
                         String msg;
-                        
+
                         //Retrieve the color parameter from detected shapes
                         while (!colorMatching && i < registeredShapes.size()) {
                             infoReceived = false;
@@ -248,7 +253,7 @@ public class MoteurFusionMultimodal {
                             } catch (IvyException ex) {
                                 Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            
+
                             //Waiting for receive the color parameter from the palette
                             while (!infoReceived) {
 
@@ -261,8 +266,11 @@ public class MoteurFusionMultimodal {
                                 System.out.println("erreur when select color. State is null");
                             } else {
                                 switch (machine.getCurrent_state()) {
-                                    case MOVE ->
+                                    case MOVE -> {
                                         System.out.println("need position");
+                                        controler.getjLabel3().setText("Donnez la position où déplacer l'objet");
+                                        machine.voice_color(true);
+                                    }
                                     //Execute Delete command after the definition of a selected object
                                     case DELETE -> {
                                         msg = "Palette:SupprimerObjet nom=" + selectedShape;
@@ -271,12 +279,13 @@ public class MoteurFusionMultimodal {
                                         } catch (IvyException ex) {
                                             Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                                         }
+                                        controler.getjLabel3().setText("...");
+                                        machine.voice_color(true);
                                     }
                                     default ->
                                         System.out.println("erreur. State is not defined at this part");
                                 }
                             }
-                            machine.voice_object();
                         }
                     }
 
@@ -286,17 +295,26 @@ public class MoteurFusionMultimodal {
                         try {
                             bus.sendMsg(msg);
                             selectedShape = "";
+                            controler.getjLabel3().setText("...");
+                            machine.voice_move_position();
                         } catch (IvyException ex) {
                             Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    case SUPPRIMER ->
-                        System.out.println("voix donne supprimer");
-                    default ->
+                    case SUPPRIMER -> {
+                        controler.getjLabel3().setText("...");
+                    }
+                    default -> {
                         System.out.println("commande vocale inconnue");
+                        controler.getjLabel3().setText("...");
+                    }
                 }
 
             }
+            else {
+                controler.getjLabel3().setText("Commande non reconnue, recommencez");
+            }
+            System.out.println("state after voice : " + machine.getCurrent_state());
         });
 
         //Method called if a whole clean up is needed. Used with an interface button      
@@ -307,6 +325,7 @@ public class MoteurFusionMultimodal {
             } catch (IvyException ex) {
                 Logger.getLogger(MoteurFusionMultimodal.class.getName()).log(Level.SEVERE, null, ex);
             }
+            machine.initialize();
         });
     }
 
@@ -322,7 +341,6 @@ public class MoteurFusionMultimodal {
 
     //Convert detected command to command object
     public void manageCommande(String commande) {
-        System.out.println(commande);
         switch (commande) {
             case "RECTANGLE" -> {
                 current_commande = Commande.RECTANGLE;

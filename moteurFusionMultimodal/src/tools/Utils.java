@@ -12,15 +12,15 @@ public class Utils {
 
     public static final String BLACK_ENG = "black";
     public static final String BLACK_FR = "noir";
-    public static final String BLACK_RGB = "0.0.0";
+    public static final String BLACK_RGB = "0:0:0";
 
     public static final String RED_ENG = "red";
     public static final String RED_FR = "rouge";
-    public static final String RED_RGB = "255.0.0";
+    public static final String RED_RGB = "255:0:0";
 
     public static final String BLUE_ENG = "blue";
     public static final String BLUE_FR = "bleu";
-    public static final String BLUE_RGB = "0.0.255";
+    public static final String BLUE_RGB = "0:0:255";
 
     /**
      * French to English color convertor
@@ -70,5 +70,15 @@ public class Utils {
             default ->
                 BLACK_RGB;
         };
+    }
+    
+    /**
+     * Gives the value of the confidence from SRA5 converted to int
+     * @param transcriptedValue : confidence value from SRA5 
+     * @return 
+     */
+    public static int findConfidence(String transcriptedValue){
+        String decompose[] = transcriptedValue.split(",");
+        return Integer.parseInt(decompose[1].substring(0, 2));
     }
 }

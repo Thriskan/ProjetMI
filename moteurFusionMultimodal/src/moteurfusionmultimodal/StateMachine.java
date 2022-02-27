@@ -38,6 +38,8 @@ public class StateMachine {
                 current_state = State.DRAW_RECT;
             case MOVING ->
                 current_state = State.DRAW_RECT;
+            default ->
+                current_state = State.DRAW_RECT;
         }
     }
 
@@ -58,6 +60,8 @@ public class StateMachine {
             case DELETE ->
                 current_state = State.DRAW_ELLIPSE;
             case MOVING ->
+                current_state = State.DRAW_ELLIPSE;
+            default ->
                 current_state = State.DRAW_ELLIPSE;
         }
     }
@@ -80,6 +84,8 @@ public class StateMachine {
                 current_state = State.MOVE;
             case MOVING ->
                 current_state = State.MOVE;
+            default ->
+                current_state = State.MOVE;
         }
     }
 
@@ -101,6 +107,8 @@ public class StateMachine {
                 current_state = State.DELETE;
             case MOVING ->
                 current_state = State.DELETE;
+            default ->
+                current_state = State.MOVE;
         }
     }
 
@@ -126,6 +134,8 @@ public class StateMachine {
                 System.out.println("Impossible voice from Delete");
             case MOVING ->
                 System.out.println("Impossible voice from Moving");
+            default ->
+                System.out.println("Impossible state");
         }
     }
 
@@ -150,6 +160,8 @@ public class StateMachine {
                 System.out.println("Parameters for moving object");
                 current_state = State.IDLE;
             }
+            default ->
+                System.out.println("Impossible state");
         }
     }
 
@@ -158,7 +170,7 @@ public class StateMachine {
      * If it's the move command, the state is set to MOVING, waiting for the position parameter
      * If it's the delete command, the state comes back to idle
      */
-    public void voice_object() {
+    public void voice_object(boolean only_one) {
         switch (current_state) {
             case IDLE ->
                 System.out.println("Impossible voice from Idle");
@@ -167,20 +179,72 @@ public class StateMachine {
             case DRAW_ELLIPSE ->
                 System.out.println("Impossible voice from Draw_ellipse");
             case MOVE -> {
-                System.out.println("Parameters for moving object");
-                current_state = State.MOVING;
+                if (only_one){
+                    System.out.println("Parameters for moving object");
+                    current_state = State.MOVING;
+                }
+                else{
+                    System.out.println("Impossible voice from move");
+                }
+                
             }
             case DELETE -> {
-                System.out.println("deleting");
-                current_state = State.IDLE;
+                if (only_one){
+                    System.out.println("deleting");
+                    current_state = State.IDLE;
+                }
+                else{
+                    System.out.println("Impossible voice from delete");
+                }
+                
             }
             case MOVING ->
                 System.out.println("Impossible voice from Moving");
+            default ->
+                System.out.println("Impossible state");
+        }
+    }
+    
+    public void voice_color(boolean selected) {
+        switch (current_state) {
+            case IDLE ->
+                System.out.println("Impossible voice from Idle");
+            case DRAW_RECT ->
+                System.out.println("Impossible voice from Draw_rect");
+            case DRAW_ELLIPSE ->
+                System.out.println("Impossible voice from Draw_ellipse");
+            case MOVE -> {
+                if(selected){
+                    System.out.println("Parameters for moving object");
+                    current_state = State.MOVING;
+                    }
+                else{
+                    System.out.println("Impossible voice from move");
+                }
+            }
+            case DELETE -> {
+                if(selected){
+                    System.out.println("deleting");
+                    current_state = State.IDLE;
+                }
+                else{
+                    System.out.println("Impossible voice from delete");
+                }
+                
+            }
+            case MOVING ->
+                System.out.println("Impossible voice from Moving");
+            default ->
+                System.out.println("Impossible state");
         }
     }
 
     public State getCurrent_state() {
         return current_state;
+    }
+    
+    public void initialize(){
+        current_state = State.IDLE;
     }
 
 }
